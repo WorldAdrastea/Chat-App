@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 const Screen2 = ({ route, navigation }) => {
-    const { name } = route.params;
+    const { name, backgroundColor } = route.params;
 
     useEffect(() => {
         console.log('Name:', name)
@@ -10,7 +10,7 @@ const Screen2 = ({ route, navigation }) => {
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: backgroundColor }]}>
             <Text>Hello Welcome to the Chat!</Text>
         </View>
     );

@@ -5,6 +5,7 @@ import { Image } from 'react-native';
 
 const Screen1 = ({ navigation }) => {
     const [name, setName] = useState('');
+    const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
 
     return (
         <ImageBackground
@@ -32,22 +33,26 @@ const Screen1 = ({ navigation }) => {
                     <View style={styles.colorBox}>
                         <TouchableOpacity
                             style={[styles.colorButton, { backgroundColor: "#090C08" }]}
+                            onPress={() => setBackgroundColor("#090C08")}
                         />
                         <TouchableOpacity
                             style={[styles.colorButton, { backgroundColor: "#474056" }]}
+                            onPress={() => setBackgroundColor("#474056")}
                         />
                         <TouchableOpacity
                             style={[styles.colorButton, { backgroundColor: "#8A95A5" }]}
+                            onPress={() => setBackgroundColor("#8A95A5")}
                         />
                         <TouchableOpacity
                             style={[styles.colorButton, { backgroundColor: "#B9C6AE" }]}
+                            onPress={() => setBackgroundColor("#B9C6AE")}
                         />
                     </View>
                     <View style={styles.chatButton}>
                         <Button
                             title="Start Chatting"
                             color="#FFFFFF"
-                            onPress={() => navigation.navigate('Screen2', { name: name})}
+                            onPress={() => navigation.navigate('Screen2', { name: name, backgroundColor: backgroundColor })}
                         />
                     </View>
                 </View>
@@ -66,26 +71,29 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '88%'
+        width: '88%',
+        fontWeight: 300
     },
     container3: {
-        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         height: '44%',
         width: '88%',
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF',
+        marginTop: '40%',
+        marginBottom: '20%'
     },
     inputContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
-        borderWidth: 0.5,
+        borderWidth: 2,
         borderColor: '#000',
         height: 40,
         borderRadius: 5,
         margin: 10,
+        marginTop: 20
     },
     textInput: {
         flex: 1,
@@ -127,6 +135,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         backgroundColor: '#757083',
         padding: 10,
+        marginBottom: '5%'
     },
     bgImage: {
         flex: 1
