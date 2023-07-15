@@ -4,10 +4,12 @@ import { StyleSheet, View, Text, Button, TextInput, TouchableOpacity, ImageBackg
 import { Image } from 'react-native';
 
 const Screen1 = ({ navigation }) => {
+    // State variable declaration
     const [name, setName] = useState('');
     const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
 
     return (
+        //Sets BG Image
         <ImageBackground
             source={require('../assets/Background_Image.png')}
             style={styles.bgImage}
@@ -17,6 +19,7 @@ const Screen1 = ({ navigation }) => {
                     <Text style={styles.title}>Chat</Text>
                 </View>
                 <View style={styles.container3}>
+                    {/* Text input for user to enter name */}
                     <View style={styles.inputContainer}>
                         <Image
                             source={require('../assets/icon.png')}
@@ -29,6 +32,7 @@ const Screen1 = ({ navigation }) => {
                             placeholder='Your Name'
                         ></TextInput>
                     </View>
+                    {/* Allows user to choose bg colour for when they get to Screen2 */}
                     <Text>Choose Background Colour</Text>
                     <View style={styles.colorBox}>
                         <TouchableOpacity
@@ -48,6 +52,7 @@ const Screen1 = ({ navigation }) => {
                             onPress={() => setBackgroundColor("#B9C6AE")}
                         />
                     </View>
+                    {/* Navigates user to Screen2 */}
                     <View style={styles.chatButton}>
                         <Button
                             title="Start Chatting"
@@ -61,6 +66,7 @@ const Screen1 = ({ navigation }) => {
     );
 }
 
+// Stylesheet CSS
 const styles = StyleSheet.create({
     container: {
         flex: 1,

@@ -6,11 +6,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Create the navigator
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator(); // Creating a new stack navigator using the createNativeStackNavigator function
 
 const App = () => {
   return (
-    <NavigationContainer>
+    // Wrapping the entire app with the NavigationContainer component to provide navigation functionalities
+    <NavigationContainer> 
       <Stack.Navigator initialRouteName="Screen1">
         <Stack.Screen
           name="Screen1"

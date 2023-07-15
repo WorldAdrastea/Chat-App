@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 const Screen2 = ({ route, navigation }) => {
+    // Extracting the 'name' and 'backgroundColor' from the route parameters
     const { name, backgroundColor } = route.params;
 
+    // Updating the title of the screen in the navigation options with the value of 'name'
     useEffect(() => {
         console.log('Name:', name)
         navigation.setOptions({ title: name});
@@ -16,6 +18,7 @@ const Screen2 = ({ route, navigation }) => {
     );
 }
 
+//Stylesheet CSS
 const styles = StyleSheet.create({
     container: {
     flex: 1,
