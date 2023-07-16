@@ -55,12 +55,16 @@ const Screen1 = ({ navigation }) => {
                     {/* Navigates user to Screen2 */}
                     <View style={styles.chatButton}>
                         <Button
+                            accessible={true}
+                            accessibilityLabel="Takes you to chat screen"
+                            accessibilityHint="Takes you to the chat screen"
                             title="Start Chatting"
                             color="#FFFFFF"
                             onPress={() => navigation.navigate('Screen2', { name: name, backgroundColor: backgroundColor })}
                         />
                     </View>
                 </View>
+                { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null }
             </View>
         </ImageBackground>
     );
