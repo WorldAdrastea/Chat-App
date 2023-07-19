@@ -1,12 +1,31 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, Button, TextInput, TouchableOpacity, ImageBackground, Alert } from 'react-native';
 //Have to separate Image otherwise error comes up
 import { Image } from 'react-native';
+import { getAuth, signInAnonymously } from 'firebase/auth';
 
 const Screen1 = ({ navigation }) => {
     // State variable declaration
     const [name, setName] = useState('');
     const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
+    const auth = getAuth();
+
+    // Function to handle anonymous sign-in with Firebase Auth
+    const signInUser = () => {
+        signInAnonymously(auth)
+            .then((result) => {
+                // Navigate to Screen2 with user data as parameters
+                navigation.navigate("Screen2", {
+                    name: name, 
+                    backgroundColor: backgroundColor, 
+                    userID: result.user.uid
+                });
+                Alert.alert("Signed in Successfully!");
+            })
+            .catch((error) => {
+                Alert.alert("Unable to sign in.");
+            });
+    };
 
     return (
         //Sets BG Image
@@ -60,7 +79,7 @@ const Screen1 = ({ navigation }) => {
                             accessibilityHint="Takes you to the chat screen"
                             title="Start Chatting"
                             color="#FFFFFF"
-                            onPress={() => navigation.navigate('Screen2', { name: name, backgroundColor: backgroundColor })}
+                            onPress={signInUser}
                         />
                     </View>
                 </View>
