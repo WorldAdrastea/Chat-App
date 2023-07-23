@@ -6,7 +6,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import firebase
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
+// import useNetInfo
+import { useNetInfo }from '@react-native-community/netinfo';
+import { useEffect } from 'react';
+import { LogBox, Alert } from 'react-native';
 
 // Create the navigator
 const Stack = createNativeStackNavigator(); // Creating a new stack navigator using the createNativeStackNavigator function
@@ -23,6 +27,17 @@ const App = () => {
     appId: "1:207972992076:web:ca8865d306d3a9faf960e9",
     measurementId: "G-HB5XE8NVDK"
   };
+
+  const connectionStatus = useNetInfo();
+
+  useEffect(() => {
+    if (connectionStatus.isConnected === false) {
+      Alert.alert("Connection Lost!");
+      disableNetwork(db);
+    } else if (connectionStatus.isConnected === true) {
+      enableNetwork(db);
+    }
+  }, [connectionStatus.isConnected]);
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
@@ -43,7 +58,7 @@ const App = () => {
           name="Screen2"
         >
         {/* Passes the props to Screen2 component */}
-        {(props) => <Screen2 db={db} {...props} />}
+        {(props) => <Screen2 isConnected={connectionStatus.isConnected} db={db} {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
