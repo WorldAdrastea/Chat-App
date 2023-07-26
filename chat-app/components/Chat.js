@@ -2,10 +2,12 @@ import { useEffect,useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 // Imports Gifted Chat Library
 import { Bubble, GiftedChat, InputToolbar } from "react-native-gifted-chat";
-import { collection, addDoc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
+import { collection, addDoc, query, onSnapshot, orderBy } from 'firebase/firestore';
+import CustomActions from './CustomActions';
+import MapView from 'react-native-maps';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-const Screen2 = ({ route, navigation, db, isConnected }) => {
+const Screen2 = ({ route, navigation, db, isConnected, storage }) => {
     // Extracting the 'name' and 'backgroundColor' from the route parameters
     const { name, backgroundColor, userID } = route.params;
     // Creating a state variable 'messages' and a function to update it using useState hook
@@ -20,6 +22,14 @@ const Screen2 = ({ route, navigation, db, isConnected }) => {
             user: newMessages[0].user,
         });
     };
+
+    const cacheMessages = async (messagesToCache) => {
+        try {
+            await AsyncStorage.setItem('messages', JSON.stringify(messagesToCache))
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 
     const loadCachedMessages = async () => {
         const loadCachedMessages = await AsyncStorage.getItem("messages") || [];
@@ -47,6 +57,31 @@ const Screen2 = ({ route, navigation, db, isConnected }) => {
         else return null;
     };
 
+    const renderCustomActions = (props) => {
+        return <CustomActions storage={storage} {...props} />
+    };
+
+    const renderCustomView = (props) => {
+        const { currentMessage } = props;
+        if (currentMessage.location) {
+            return (
+                <MapView
+                    style={{
+                        width: 150,
+                        height: 100,
+                        borderRadius: 13,
+                        margin: 3}}
+                    region={{
+                        latitude: currentMessage.location.latitude,
+                        longitude: currentMessage.location.longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                />
+            )
+        }
+    }
+
     let unsub;
     useEffect(() => {
         // Updating the title of the screen in the navigation options with the value of 'name'
@@ -54,8 +89,8 @@ const Screen2 = ({ route, navigation, db, isConnected }) => {
         if (isConnected === true) {
             // unregister current onSnapshot() listener to avoid registering multiple listeners when
             // useEffect code is re-executed.
-            if (unsubShoppinglists) unsubShoppinglists();
-            unsubShoppinglists = null;
+            if (unsub) unsub();
+            unsub = null;
             // Querying the "messages" collection in Firestore and ordering messages by createdAt field in descending order
             const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
             // Setting up a snapshot listener to listen for real-time changes to the "messages" collection
@@ -94,6 +129,8 @@ const Screen2 = ({ route, navigation, db, isConnected }) => {
                     name: name,
                 }}
                 renderInputToolbar={renderInputToolbar}
+                renderActions={renderCustomActions}
+                renderCustomView={renderCustomView}
             />
             { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="padding" /> : null }
         </View>

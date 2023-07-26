@@ -7,10 +7,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import firebase
 import { initializeApp } from "firebase/app";
 import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 // import useNetInfo
 import { useNetInfo }from '@react-native-community/netinfo';
 import { useEffect } from 'react';
-import { LogBox, Alert } from 'react-native';
+import { Alert } from 'react-native';
 
 // Create the navigator
 const Stack = createNativeStackNavigator(); // Creating a new stack navigator using the createNativeStackNavigator function
@@ -44,6 +45,7 @@ const App = () => {
 
   // Initialize Cloud Firestore and get a reference to the service
   const db = getFirestore(app);
+  const storage = getStorage(app);
 
   return (
     // Wrapping the entire app with the NavigationContainer component to provide navigation functionalities
@@ -58,7 +60,7 @@ const App = () => {
           name="Screen2"
         >
         {/* Passes the props to Screen2 component */}
-        {(props) => <Screen2 isConnected={connectionStatus.isConnected} db={db} {...props} />}
+        {(props) => <Screen2 isConnected={connectionStatus.isConnected} db={db} storage={storage} {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
