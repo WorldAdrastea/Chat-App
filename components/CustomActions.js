@@ -38,6 +38,7 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
         const blob = await response.blob();
         uploadBytes(newUploadRef, blob).then(async (snapshot) => {
             const imageURL = await getDownloadURL(snapshot.ref)
+            console.log(imageURL)
             onSend({ image: imageURL })
         });
     };

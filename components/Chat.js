@@ -16,11 +16,7 @@ const Screen2 = ({ route, navigation, db, isConnected, storage }) => {
     // Appending new messages to the existing messages in the state
     const onSend = (newMessages) => {
         // Adding a new message document to the Firestore collection
-        addDoc(collection(db, "messages"), {
-            createdAt: newMessages[0].createdAt,
-            text: newMessages[0].text,
-            user: newMessages[0].user,
-        });
+        addDoc(collection(db, "messages"), newMessages[0]);
     };
 
     const cacheMessages = async (messagesToCache) => {
@@ -40,15 +36,15 @@ const Screen2 = ({ route, navigation, db, isConnected, storage }) => {
     const renderBubble = (props) => {
         // Customizing the appearance of the message bubbles based on sender (right or left)
         return <Bubble
-        {...props}
-        wrapperStyle={{
-            right: {
-            backgroundColor: "#55EEEE"
-            },
-            left: {
-            backgroundColor: "#B330EE"
-            }
-        }}
+            {...props}
+            wrapperStyle={{
+                right: {
+                    backgroundColor: "#55EEEE"
+                },
+                left: {
+                    backgroundColor: "#B330EE"
+                }
+            }}
         />
     };
 
@@ -78,8 +74,9 @@ const Screen2 = ({ route, navigation, db, isConnected, storage }) => {
                         longitudeDelta: 0.0421,
                     }}
                 />
-            )
+            );
         }
+        return null;
     }
 
     let unsub;
@@ -100,9 +97,10 @@ const Screen2 = ({ route, navigation, db, isConnected, storage }) => {
                 documentsSnapshot.forEach((doc) => {
                     // Add each message to the newMessages array in the expected Gifted Chat format
                     newMessages.push({ 
-                        _id: doc.id, 
-                        text: doc.data().text,
+                        _id: doc.id,
+                        ...doc.data(),
                         createdAt: doc.data().createdAt.toDate(),
+                        text: doc.data().text,
                         user: doc.data().user, 
                     });
                 });
@@ -121,6 +119,7 @@ const Screen2 = ({ route, navigation, db, isConnected, storage }) => {
     return (
         <View style={[styles.container, { backgroundColor: backgroundColor }]}>
             <GiftedChat
+                styles={styles.container}
                 messages={messages}
                 renderBubble={renderBubble}
                 onSend={(newMessages) => onSend(newMessages)}
